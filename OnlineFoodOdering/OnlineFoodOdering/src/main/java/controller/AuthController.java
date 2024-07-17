@@ -22,99 +22,90 @@ import Model.User;
 import Model.userrole;
 import Repository.CartRepository;
 import Repository.UserRepository;
-import Service.CustomerUserDetailService;
 import config.JwtProvider;
 import request.LoginRequest;
 import response.AuthResponse;
+import serviceImpl.CustomerUserDetailService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 
 	private JwtProvider jwtProvider;
-	
+
 	@Autowired
 
 	private CustomerUserDetailService customerUserdetailService;
-	
+
 	@Autowired
 
 	private CartRepository cartRepository;
-	
+
 	@PostMapping("/signup")
-	public ResponseEntity<AuthResponse>createuserHandler(@RequestBody User user) throws Exception
-	{
+	public ResponseEntity<AuthResponse> createuserHandler(@RequestBody User user) throws Exception {
 		User isEmailExist = userRepository.findByEmail(user.getEmail());
-		if(isEmailExist!=null)
-		{
+		if (isEmailExist != null) {
 			throw new Exception("An account already exists with this email ");
 		}
-		
+
 		User createdUser = new User();
 		createdUser.setEmail(user.getEmail());
 		createdUser.setName(user.getName());
 		createdUser.setRole(user.getRole());
 		createdUser.setPassword(passwordEncoder.encode(user.getPassword()));
-		
+
 		User savedUser = userRepository.save(createdUser);
-		
+
 		Cart cart = new Cart();
 		cart.setCustomer(savedUser);
 		cartRepository.save(cart);
-		
-		Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(),user.getPassword());
+
+		Authentication authentication = new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = jwtProvider.generateToken(authentication);
 		AuthResponse authResponse = new AuthResponse();
 		authResponse.setJwt(jwt);
 		authResponse.setMessage("Register success");
 		authResponse.setRole(savedUser.getRole());
-		
-		return new ResponseEntity<>(authResponse,HttpStatus.CREATED);
+
+		return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
 	}
-     
-	
+
 	@PostMapping("/signin")
-	public ResponseEntity<AuthResponse> signingin(@RequestBody LoginRequest req)
-	{
+	public ResponseEntity<AuthResponse> signingin(@RequestBody LoginRequest req) {
 		String username = req.getEmail();
 		String password = req.getPassword();
-		
-		Authentication authentication = authenticate(username,password);
-		Collection<? extends GrantedAuthority>authorities = authentication.getAuthorities();
-		String role = authorities.isEmpty()?null:authorities.iterator().next().getAuthority();
+
+		Authentication authentication = authenticate(username, password);
+		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+		String role = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
 		String jwt = jwtProvider.generateToken(authentication);
 		AuthResponse authResponse = new AuthResponse();
 		authResponse.setJwt(jwt);
 		authResponse.setMessage("Register success");
-	    authResponse.setRole(userrole.valueOf(role));
-		
-		return new ResponseEntity<>(authResponse,HttpStatus.OK);
+		authResponse.setRole(userrole.valueOf(role));
 
+		return new ResponseEntity<>(authResponse, HttpStatus.OK);
 
 	}
 
-
-
 	private Authentication authenticate(String username, String password) {
 		UserDetails userDetails = customerUserdetailService.loadUserByUsername(username);
-		if(userDetails == null)
-		{
+		if (userDetails == null) {
 			throw new BadCredentialsException("Invalid User..");
 		}
-		if(!passwordEncoder.matches(password, userDetails.getPassword()))
-				{
+		if (!passwordEncoder.matches(password, userDetails.getPassword())) {
 			throw new BadCredentialsException("Invalid Password..");
-				}
+		}
 		return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 	}
 }
