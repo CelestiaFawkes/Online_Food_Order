@@ -1,21 +1,22 @@
 server:
-  port: 8082
+  port: ${SERVER_PORT}
 
 logging:
   level:
-    org.springframework: debug
+    org:
+      springframework: ${LOGGING_LEVEL_ORG_SPRINGFRAMEWORK}
 
 spring:
   datasource:
     dbcp2:
-      driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/Food-Order
-    username: root
-    password: 5249
+      driver-class-name: ${DB_DRIVER_CLASS_NAME}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        ddl-auto: update
-        show-sql: true
-        format_sql: true
+        dialect: ${JPA_HIBERNATE_DIALECT}
+        ddl-auto: ${JPA_HIBERNATE_DDL_AUTO}
+        show-sql: ${JPA_HIBERNATE_SHOW_SQL}
+        format_sql: ${JPA_HIBERNATE_FORMAT_SQL}
