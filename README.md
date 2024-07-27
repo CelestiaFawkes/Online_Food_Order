@@ -28,3 +28,7 @@ Welcome to the **Online Food Ordering Backend**! This robust backend application
 - **Spring Boot:** For creating the backend
 - **PostgreSQL:** For data persistence
 - **Docker:** For containerization and deployment
+
+![ER Diagram](C:/Users/user/OneDrive/Pictures/ERDIagram.PNG)
+
+
