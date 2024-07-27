@@ -29,6 +29,6 @@ Welcome to the **Online Food Ordering Backend**! This robust backend application
 - **PostgreSQL:** For data persistence
 - **Docker:** For containerization and deployment
 
-![ER Diagram](C:/Users/user/OneDrive/Pictures/ERDIagram.PNG)
+
 
 
