@@ -30,5 +30,8 @@ Welcome to the **Online Food Ordering Backend**! This robust backend application
 - **Docker:** For containerization and deployment
 
 
-![ER Diagram](images/ERDIagram.PNG)
+# ER Diagram
+
+![ERDIagram](https://github.com/user-attachments/assets/0caa5523-d0ae-4935-8801-f8493cc9e82a)
+
 
