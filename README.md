@@ -2,7 +2,7 @@
 
 ---
 
-Backend application for online food ordering built with Spring Boot.
+Backend application for online food ordering built with spring boot.
 
 ## Overview
 
